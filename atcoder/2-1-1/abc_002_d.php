@@ -19,6 +19,11 @@ function solve($memberNum, $relationNum, $relations)
 
     for ($i = max($relCount); $i > 0; $i--) {
         $targets = array_filter($relCount, function ($val) use ($i) { return $val >= $i; });
+        $targetMembers = array_keys($targets);
+        $targets = array_map(function ($val) use ($targetMembers) {
+            return array_intersect($targetMembers, $val);
+        }, $targets);
+        $targets = array_filter($targets, function ($val) use ($i) { return $val >= $i; });
         // 同じ知り合い数の人が同数いないとどう頑張ってもできない
         if (count($targets) < $i) continue;
         if (canMakeFaction($i, $targets, $memberRelations)) return $i + 1;
@@ -29,6 +34,13 @@ function canMakeFaction($num, $targetRels, $memberRelations)
 {
     if ($num > count($targetRels)) return false;
     // TODO
+    $targetMember = key($targetRels);
+    if (has($targetMember, $targetRels, [$targetMember])) return true;
+    array_shift($targetRels);
+    if (canMakeFaction($num, $targetRels, $memberRelations)) return true;
+    return false;
+}
+
     return false;
 }
 
