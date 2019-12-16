@@ -36,7 +36,7 @@ function isReachableGoal($x, $y)
 
     if ($searchMap[$y][$x] === GOAL) return true;
 
-    $checkedMap[$y][$x] = 1;
+    $checkedMap[$y][$x] = true;
 
     return isReachableGoal($x - 1, $y)
         || isReachableGoal($x + 1, $y)
